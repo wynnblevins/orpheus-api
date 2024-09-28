@@ -3,47 +3,47 @@
 import {
   Model, UUIDV4
 } from 'sequelize';
-const { Playlist } = require('./playlist')
 
-export interface UserAttributes {
+export interface PlaylistAttributes {
   id: string;
-  username: string;
-  password: string;
+  name: string;
+  userId: string;
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
-  class User extends Model<UserAttributes> 
-  implements UserAttributes {
+  class Playlist extends Model<PlaylistAttributes> 
+  implements PlaylistAttributes {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     id!: string;
-    username!: string;
-    password!: string;
+    name!: string;
+    userId!: string;
     static associate(models: any) {
-      User.hasMany(models.Playlist);
+      Playlist.belongsTo(models.User);
+      Playlist.hasMany(models.Song);
     }
   };
-  User.init({
+  Playlist.init({
     id: {
       type: DataTypes.UUID,
       defaultValue: UUIDV4,
       allowNull: false,
       primaryKey: true
     },
-    username: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false
+    userId: {
+      type: DataTypes.UUID,
+      allowNull: false,
     }
   }, {
     sequelize,
-    modelName: 'User',
+    modelName: 'Playlist',
   });
-  return User;
+  return Playlist;
 };
