@@ -8,6 +8,7 @@ const port = process.env.PORT || 3000;
 
 db.sequelize.sync().then(() => {
   let app = express();
+  app.use(express.json())  
   
   app = artistRoutes(app);
   app = songRoutes(app);
