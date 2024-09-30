@@ -3,7 +3,8 @@ import userService from '../services/UserService';
 
 export interface User {
   id: string,
-  name: string,
+  username: string,
+  password: string
 }
 
 const userController = {
@@ -15,6 +16,11 @@ const userController = {
   getUserByID: async (id: string) => {
     const users = await userService.getUserByID(id);
     return users;
+  },
+
+  getUserByUsername: async (username: string) => {
+    const user = await userService.getUserByUsername(username);
+    return user;
   },
 
   createUser: async (user: User) => {

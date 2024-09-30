@@ -1,6 +1,7 @@
 
 import db from "../models";
 import { User } from "../controllers/UserController";
+import bcrypt from "bcrypt";
 
 const userService = {
   getUsers: async () => {
@@ -17,8 +18,20 @@ const userService = {
     return user;
   },
 
+  getUserByUsername: async (username: string) => {
+    const user = await db.User.findOne({ 
+      where: {
+        username: username
+      }
+    });
+    return user;
+  },
+
   createUser: async (user: User) => {
     try {
+      const hashedPassword = await bcrypt.hash(user.password, 10);
+      user.password = hashedPassword;
+      
       await db.User.create({
         ...user
       });

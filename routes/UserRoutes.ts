@@ -1,26 +1,30 @@
 import type { Request, Response } from 'express';
+import bcrypt from 'bcrypt';
 import { ApplicationError } from '../errors/errors';
 import userController from '../controllers/UserController';
 
 const userRoutes = (app: any) => {
+  app.post('/api/users/login', async (req: Request, res: Response) => {
+    const username = req.body.username;
+    const password = req.body.password;
+    const user = await userController.getUserByUsername(username);
+
+    try {
+      if (await bcrypt.compare(password, user.password)) {
+        res.send('Successfully logged in.')
+      } else {
+        res.send('Not allowed.')
+      }
+    } catch (e: any) {
+      res.status(500).send();
+    }
+  });
+  
   app.get('/api/users', async (req: Request, res: Response) => {
     const users = await userController.getUsers();
     res.send(users);    
   });
   
-  app.get('/api/users/:id', async (req: Request, res: Response) => {
-    const id = req.params.id;
-    const userForID = await userController.getUserByID(id);
-
-    if (!userForID) {
-      res.status(404).send({ 
-        error: `User with ID ${id} not found.` 
-      });
-    } else {
-      res.send(userForID);
-    }
-  });
-
   app.post('/api/users', async (req: Request, res: Response) => {
     try {
       await userController.createUser(req.body);
