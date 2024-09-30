@@ -1,15 +1,21 @@
 
 import db from "../models";
 import { Playlist } from "../controllers/PlaylistController";
+import { User } from "../controllers/UserController";
 
 const playlistService = {
-  getPlaylists: async () => {
-    const playlists = await db.Playlist.findAll({});
+  getPlaylists: async (user: User) => {
+    const playlists = await db.Playlist.findAll({
+      where: {
+        UserId: user.id
+      }
+    });
+    
     return playlists;
   },
 
   getPlaylistByID: async (id: string) => {
-    const playlist = await db.Song.findOne({ 
+    const playlist = await db.Playlist.findOne({ 
       where: {
         id: id
       }
@@ -22,6 +28,7 @@ const playlistService = {
       await db.Playlist.create({
         ...playlist
       });
+      return playlist;
     } catch (e: any) {
       throw new Error(
         'Error encountered while inserting playlist record.'

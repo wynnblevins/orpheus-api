@@ -1,15 +1,16 @@
 import { ApplicationError } from "../errors/errors";
 import playlistService from "../services/PlaylistService";
+import { User } from "./UserController";
 
 export interface Playlist {
   id: string,
   name: string,
-  userID: string,
+  username: string
 }
 
 const playlistController = {
-  getPlaylists: async () => {
-    const playlists = await playlistService.getPlaylists();
+  getPlaylists: async (user: User) => {
+    const playlists = await playlistService.getPlaylists(user);
     return playlists;
   },
 

@@ -30,7 +30,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
       allowNull: false,
       primaryKey: true
     },
-    name: DataTypes.STRING
+    name: DataTypes.STRING,
+    PlaylistId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    }
   }, {
     sequelize,
     modelName: 'Song',

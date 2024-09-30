@@ -1,7 +1,9 @@
 import type { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import { ApplicationError } from '../errors/errors';
 import userController from '../controllers/UserController';
+import authenticateToken from '../services/AuthenticationService';
 
 const userRoutes = (app: any) => {
   app.post('/api/users/login', async (req: Request, res: Response) => {
@@ -9,20 +11,18 @@ const userRoutes = (app: any) => {
     const password = req.body.password;
     const user = await userController.getUserByUsername(username);
 
+    const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
+    const accessToken = jwt.sign({ username: user.username }, accessTokenSecret as string);
+
     try {
       if (await bcrypt.compare(password, user.password)) {
-        res.send('Successfully logged in.')
+        res.json({ accessToken });
       } else {
         res.send('Not allowed.')
       }
     } catch (e: any) {
       res.status(500).send();
     }
-  });
-  
-  app.get('/api/users', async (req: Request, res: Response) => {
-    const users = await userController.getUsers();
-    res.send(users);    
   });
   
   app.post('/api/users', async (req: Request, res: Response) => {
@@ -34,7 +34,7 @@ const userRoutes = (app: any) => {
     }
   });
 
-  app.put('/api/users/:id', async (req: Request, res: Response) => {
+  app.put('/api/users/:id', authenticateToken, async (req: Request, res: Response) => {
     const id = req.params.id
     
     try {
@@ -51,7 +51,7 @@ const userRoutes = (app: any) => {
     }
   });
 
-  app.delete('/api/users/:id', async (req: Request, res: Response) => {
+  app.delete('/api/users/:id', authenticateToken, async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
       await userController.deleteUser(id);
