@@ -1,6 +1,6 @@
 import express from 'express';
 import db from './models';
-import artistRoutes from './routes/PlaylistRoutes';
+import userRoutes from './routes/UserRoutes';
 import songRoutes from './routes/SongRoutes';
 import playlistRoutes from './routes/PlaylistRoutes';
 
@@ -10,7 +10,7 @@ db.sequelize.sync().then(() => {
   let app = express();
   app.use(express.json())  
   
-  app = artistRoutes(app);
+  app = userRoutes(app);
   app = songRoutes(app);
   app = playlistRoutes(app);
 

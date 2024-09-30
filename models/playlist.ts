@@ -7,7 +7,7 @@ import {
 export interface PlaylistAttributes {
   id: string;
   name: string;
-  userId: string;
+  UserId: string;
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -20,7 +20,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
      */
     id!: string;
     name!: string;
-    userId!: string;
+    UserId!: string;
     static associate(models: any) {
       Playlist.belongsTo(models.User);
       Playlist.hasMany(models.Song);
@@ -37,7 +37,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    userId: {
+    UserId: {
       type: DataTypes.UUID,
       allowNull: false,
     }

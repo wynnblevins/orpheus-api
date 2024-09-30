@@ -19,9 +19,10 @@ const songService = {
 
   createSong: async (song: Song) => {
     try {
-      await db.Song.create({
+      const newSong = await db.Song.create({
         ...song
       });
+      return newSong;
     } catch (e: any) {
       throw new Error(
         'Error encountered while inserting song record.'

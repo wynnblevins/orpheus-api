@@ -23,12 +23,11 @@ const songRoutes = (app: any) => {
 
   app.post('/api/songs', async (req: Request, res: Response) => {
     try {
-      await songController.createSong(req.body);
+      const result = await songController.createSong(req.body);
+      res.status(201).send(result);
     } catch (e: any) {
       res.status(500).send(e);
     }
-
-    res.sendStatus(201);
   });
 
   app.put('/api/songs/:id', async (req: Request, res: Response) => {
@@ -42,9 +41,9 @@ const songRoutes = (app: any) => {
         if (e.name === 'NOT_FOUND_ERROR') {
           res.status(404).send();
         }
-      } 
-
-      res.sendStatus(500);
+      } else {
+        res.sendStatus(500);
+      }
     }
   });
 
