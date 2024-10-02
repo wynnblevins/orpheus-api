@@ -1,15 +1,14 @@
 import type { Request, Response } from 'express';
 import songController from '../controllers/SongController';
 import { ApplicationError } from '../errors/errors';
-import authenticateToken from '../services/AuthenticationService';
 
 const songRoutes = (app: any) => {
-  app.get('/api/songs', authenticateToken, async (req: Request, res: Response) => {
+  app.get('/api/songs', async (req: Request, res: Response) => {
     const songs = await songController.getSongs();
     res.send(songs);    
   });
   
-  app.get('/api/songs/:id', authenticateToken, async (req: Request, res: Response) => {
+  app.get('/api/songs/:id', async (req: Request, res: Response) => {
     const id = req.params.id;
     const songForID = await songController.getSongByID(id);
 
@@ -22,7 +21,7 @@ const songRoutes = (app: any) => {
     }
   });
 
-  app.post('/api/songs', authenticateToken, async (req: Request, res: Response) => {
+  app.post('/api/songs', async (req: Request, res: Response) => {
     try {
       const result = await songController.createSong(req.body);
       res.status(201).send(result);
@@ -31,7 +30,7 @@ const songRoutes = (app: any) => {
     }
   });
 
-  app.put('/api/songs/:id', authenticateToken, async (req: Request, res: Response) => {
+  app.put('/api/songs/:id', async (req: Request, res: Response) => {
     const id = req.params.id
     
     try {
@@ -48,7 +47,7 @@ const songRoutes = (app: any) => {
     }
   });
 
-  app.delete('/api/songs/:id', authenticateToken, async (req: Request, res: Response) => {
+  app.delete('/api/songs/:id', async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
       await songController.deleteSong(id);

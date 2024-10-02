@@ -2,7 +2,7 @@ import { ApplicationError } from '../errors/errors';
 import userService from '../services/UserService';
 
 export interface User {
-  id: string,
+  id?: string,
   username: string,
   password: string
 }

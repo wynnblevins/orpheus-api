@@ -29,9 +29,6 @@ const userService = {
 
   createUser: async (user: User) => {
     try {
-      const hashedPassword = await bcrypt.hash(user.password, 10);
-      user.password = hashedPassword;
-      
       await db.User.create({
         ...user
       });

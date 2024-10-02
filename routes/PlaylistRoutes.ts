@@ -1,17 +1,16 @@
 import type { Request, Response } from 'express';
 import { ApplicationError } from '../errors/errors';
 import playlistController from '../controllers/PlaylistController';
-import authenticateToken from '../services/AuthenticationService';
 
 const playlistRoutes = (app: any) => {
-  app.get('/api/playlists', authenticateToken, async (req: Request, res: Response) => {
+  app.get('/api/playlists', async (req: Request, res: Response) => {
     // @ts-ignore
     const user = req.user;
     const playlists = await playlistController.getPlaylists(user);
     res.status(200).send(playlists);    
   });
   
-  app.get('/api/playlists/:id', authenticateToken, async (req: Request, res: Response) => {
+  app.get('/api/playlists/:id', async (req: Request, res: Response) => {
     const id = req.params.id;
     const playlistForID = await playlistController.getPlaylistByID(id);
 
@@ -24,7 +23,7 @@ const playlistRoutes = (app: any) => {
     }
   });
 
-  app.post('/api/playlists', authenticateToken, async (req: Request, res: Response) => {
+  app.post('/api/playlists', async (req: Request, res: Response) => {
     try {
       const newPlaylist = await playlistController.createPlaylist(req.body);
       res.status(201).send(newPlaylist);
@@ -33,7 +32,7 @@ const playlistRoutes = (app: any) => {
     }
   });
 
-  app.put('/api/playlists/:id', authenticateToken, async (req: Request, res: Response) => {
+  app.put('/api/playlists/:id', async (req: Request, res: Response) => {
     const id = req.params.id
     
     try {
@@ -50,7 +49,7 @@ const playlistRoutes = (app: any) => {
     }
   });
 
-  app.delete('/api/playlists/:id', authenticateToken, async (req: Request, res: Response) => {
+  app.delete('/api/playlists/:id', async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
       await playlistController.deletePlaylist(id);
