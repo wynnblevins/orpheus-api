@@ -17,7 +17,13 @@ const userRoutes = (app: any) => {
       if (err) {
         res.status(500).json({ error: 'Internal server error' });
       } else if (result) {
-        res.status(200).json({ message: 'Login successful' });
+        const user = { name: username }
+        // @ts-ignore
+        const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET)
+        res.status(200).json({ 
+          message: 'Login successful',
+          accessToken: accessToken
+        });
       } else {
         res.status(401).json({ error: 'Invalid username or password' });
       }
