@@ -5,6 +5,15 @@ import db from "../models";
 import { Playlist } from "../controllers/PlaylistController";
 import userController, { User } from "../controllers/UserController";
 
+const generateAccessToken = (user: any) => {
+  return jwt.sign(
+    user, 
+    // @ts-ignore
+    process.env.ACCESS_TOKEN_SECRET, 
+    { expiresIn: '10m' }
+  );
+};
+
 const authenticateToken = (req: Request, res: Response, next: any) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
@@ -26,4 +35,7 @@ const authenticateToken = (req: Request, res: Response, next: any) => {
   });
 }
 
-export default authenticateToken;
+export {
+  generateAccessToken,
+  authenticateToken 
+};

@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import songController from '../controllers/SongController';
 import { ApplicationError } from '../errors/errors';
-import authenticateToken from '../services/AuthenticationService';
+import { authenticateToken } from '../services/AuthenticationService';
 
 const songRoutes = (app: any) => {
   app.get('/api/songs', authenticateToken, async (req: Request, res: Response) => {

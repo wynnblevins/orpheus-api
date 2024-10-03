@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { ApplicationError } from '../errors/errors';
 import playlistController from '../controllers/PlaylistController';
-import authenticateToken from '../services/AuthenticationService';
+import { authenticateToken } from '../services/AuthenticationService';
 
 const playlistRoutes = (app: any) => {
   app.get('/api/playlists', authenticateToken, async (req: Request, res: Response) => {
